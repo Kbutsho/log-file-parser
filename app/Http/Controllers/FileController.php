@@ -11,7 +11,6 @@ class FileController extends Controller
 {
     public function showForm()
     {
-
         return view('logFileForm');
     }
     public function fileParse(Request $request)

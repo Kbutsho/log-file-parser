@@ -27,7 +27,7 @@ class FileController extends Controller
         $file = $request->file('file');
         $path = $file->store('temp');
         $file_content = file_get_contents(storage_path("app/$path"));
-        $lines = explode(PHP_EOL, $file_content);
+        $lines = explode(PHP_EOL, $file_content); //4
         $matched = false;
         $count = 0;
         foreach ($lines as $line) {
@@ -55,7 +55,7 @@ class FileController extends Controller
             }
         }
         if (!$matched) {
-            return redirect()->back()->with('message', 'no match found in your log file!');
+            return redirect()->back()->with('message', 'no log found in your file!');
         }
         Storage::delete($path);
         return redirect()->route('logs')->with('message', "$count logs saved successfully!");

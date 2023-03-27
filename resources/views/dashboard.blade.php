@@ -15,7 +15,7 @@
 <body>
     @include('layout.navBar')
     @if (session('success'))
-        <div class="alert alert-success text-center" id="success-alert">
+        <div class="alert alert-success text- fw-bold" id="success-alert">
             {{ session('success') }}
         </div>
     @endif

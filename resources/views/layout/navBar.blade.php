@@ -8,6 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav ms-auto ">
                 <a class="nav-link text-white fw-bold" href="/dashboard">Dashboard</a>
+                <a class="nav-link text-white fw-bold" href="/upload">Add logs</a>
                 <a class="nav-link text-white fw-bold" href="/logs">All logs</a>
                 <a class="nav-link fw-bold" style="color:red" href="/logout">Logout</a>
             </div>

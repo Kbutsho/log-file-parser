@@ -16,7 +16,8 @@
         body {
             font-family: 'Josefin Sans', sans-serif;
         }
-        span{
+
+        span {
             font-weight: bold;
             color: red;
             font-size: 14px;
@@ -25,24 +26,35 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-            <div class="box p-5" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 10px">
-                @if (session('message'))
-                    <div class="alert alert-danger my-3">{{ session('message') }}</div>
-                @endif
-                <h4 class="mb-4 fw-bold text-primary">Upload Log File</h4>
-                <form method="POST" action="{{ route('file-parse') }}" enctype="multipart/form-data">
-                    @csrf
-                    <input class="form-control mb-2" type="file" name="file">
-                    @error('file')
-                        <span>{{ $message }}</span>
-                    @enderror
-                    <button class="btn btn-primary mt-4 w-100" type="submit">Upload File</button>
-                </form>
+    <div>
+        @include("layout.navBar")
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center" style="height: 90vh;">
+                <div class="box p-5" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 10px">
+                    @if (session('message'))
+                        <div class="alert alert-danger my-3 fw-bold" id="message">{{ session('message') }}</div>
+                    @endif
+                    <h4 class="mb-4 fw-bold text-primary">Upload Log File</h4>
+                    <form method="POST" action="{{ route('file-parse') }}" enctype="multipart/form-data">
+                        @csrf
+                        <input class="form-control mb-2" type="file" name="file">
+                        @error('file')
+                            <span>{{ $message }}</span>
+                        @enderror
+                        <button class="btn btn-primary mt-4 w-100" type="submit">Upload File</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var successAlert = document.getElementById('message');
+                successAlert.parentNode.removeChild(successAlert);
+            }, 3000);
+        });
+    </script>
 </body>
 
 </html>

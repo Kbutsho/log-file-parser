@@ -50,7 +50,7 @@
             <div class="p-4 box" id="box">
                 <h3 class="my-4">Sign up</h3>
                 @if (session('success'))
-                    <div class="alert alert-danger my-2" id="message"> {{ session('success') }}</div>
+                    <div class="alert alert-danger my-2 fw-bold" id="message"> {{ session('success') }}</div>
                 @endif
                 <form method="POST" action="{{ route('login') }}">
                     @csrf

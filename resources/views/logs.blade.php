@@ -40,7 +40,7 @@
                 </div>
             </div>
         @endif
-        <a class="mb-3 btn btn-success fw-bold w-100" href="/upload">add logs</a>
+        {{-- <a class="mb-3 btn btn-success fw-bold w-100" href="/upload">add logs</a> --}}
         <table id="data" class="pt-3 table table-hover table-striped table-borderless">
             <thead class="bg-primary">
                 <tr class="text-center text-white">
@@ -55,10 +55,11 @@
                     <th>HTTP Status Code</th>
                     <th>Bytes Sent</th>
                     {{--                     <th>Referer URL</th> --}}
-                    {{--                     <th>User Agent</th> --}}
-                    <th>Forwarded Info</th>
+                    <th>User Agent</th>
+                    {{-- <th>Forwarded Info</th> --}}
                 </tr>
             </thead>
+    
         </table>
     </div>
 
@@ -89,47 +90,64 @@
                 lengthMenu: [10, 25, 50, 100, 250, 500, 1000],
                 columns: [{
                         data: 'id',
-                        name: 'id'
+                        name: 'id',
+                        className: 'text-center'
                     },
                     {
                         data: 'remote_host',
-                        name: 'remote_host'
+                        name: 'remote_host',
+                        className: 'text-center'
                     },
                     {
                         data: 'remote_log',
-                        name: 'remote_log'
+                        name: 'remote_log',
+                        className: 'text-center'
                     },
                     {
                         data: 'remote_user',
-                        name: 'remote_user'
+                        name: 'remote_user',
+                        className: 'text-center'
                     },
                     {
                         data: 'time_stamp',
-                        name: 'time_stamp'
+                        name: 'time_stamp',
+                        className: 'text-center'
                     },
                     {
                         data: 'http_method',
-                        name: 'http_method'
+                        name: 'http_method',
+                        className: 'text-center'
                     },
                     // {data: 'url_path',  name: 'url_path' },
                     {
                         data: 'protocol_version',
-                        name: 'protocol_version'
+                        name: 'protocol_version',
+                        className: 'text-center'
                     },
                     {
                         data: 'http_status_code',
-                        name: 'http_status_code'
+                        name: 'http_status_code',
+                        className: 'text-center'
                     },
                     {
                         data: 'bytes_sent',
-                        name: 'bytes_sent'
+                        name: 'bytes_sent',
+                        className: 'text-center'
                     },
                     // {data: 'referer_url',  name: 'referer_url' },
-                    // {data: 'user_agent',  name: 'user_agent' },
                     {
-                        data: 'forwarded_info',
-                        name: 'forwarded_info'
-                    }
+                        "data": "user_agent",
+                        "name": "user_agent",
+                        className: 'text-center',
+                        "render": function(data, type, row) {
+                            var parts = data.split('/');
+                            return parts[0]; // return the first part of the string
+                        }
+                    },
+                    // {
+                    //     data: 'forwarded_info',
+                    //     name: 'forwarded_info'
+                    // }
 
                 ]
             });

@@ -19,7 +19,7 @@
             {{ session('success') }}
         </div>
     @endif
-    <div class="container d-flex justify-content-center align-items-center" style="height: 90vh; ">
+    <div class="container d-flex justify-content-center align-items-center" style="height: 80vh; ">
         <h1 class="text-center">Dashboard</h1>
     </div>
     <script>

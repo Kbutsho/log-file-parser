@@ -15,6 +15,7 @@
     <style>
         body {
             font-family: 'Josefin Sans', sans-serif;
+            transition: background-color 0.5s ease-out;
         }
 
         span {
@@ -22,27 +23,33 @@
             color: red;
             font-size: 14px;
         }
+        .box {
+            transition: background-color 0.5s ease-out;
+        }
     </style>
 </head>
 
 <body>
-    <div>
-        @include("layout.navBar")
+    <div class="">
+        @include('layout.navBar')
         <div class="container">
-            <div class="d-flex justify-content-center align-items-center" style="height: 90vh;">
-                <div class="box p-5" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 10px">
-                    @if (session('message'))
-                        <div class="alert alert-danger my-3 fw-bold" id="message">{{ session('message') }}</div>
-                    @endif
-                    <h4 class="mb-4 fw-bold text-primary">Upload Log File</h4>
-                    <form method="POST" action="{{ route('file-parse') }}" enctype="multipart/form-data">
-                        @csrf
-                        <input class="form-control mb-2" type="file" name="file">
-                        @error('file')
-                            <span>{{ $message }}</span>
-                        @enderror
-                        <button class="btn btn-primary mt-4 w-100" type="submit">Upload File</button>
-                    </form>
+            <div class="container">
+                <div class="d-flex justify-content-center align-items-center" style="height: 90vh;">
+                    <div class="box p-5" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 10px">
+                        @if (session('message'))
+                            <div class="alert alert-danger my-3 fw-bold" id="message">{{ session('message') }}</div>
+                        @endif
+                        <h4 class="mb-4 fw-bold text-primary">Upload Log File</h4>
+                        <form id="upload-form" method="POST" action="{{ route('file-parse') }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input class="form-control mb-2" type="file" name="file">
+                            @error('file')
+                                <span>{{ $message }}</span>
+                            @enderror
+                            <button class="btn btn-primary mt-4 w-100" type="submit">upload File</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,7 +59,19 @@
             setTimeout(function() {
                 var successAlert = document.getElementById('message');
                 successAlert.parentNode.removeChild(successAlert);
-            }, 3000);
+            }, 5000);
+        });
+        const box = document.querySelector('.box');
+        const form = document.getElementById('upload-form');
+        form.addEventListener('submit', () => {
+            const button = form.querySelector('button[type="submit"]');
+            button.innerText = 'uploading.....';
+            document.body.style.backgroundColor = '#f1f1f1';
+            box.style.backgroundColor = '#EEF1FF';
+        });
+        form.addEventListener('load', () => {
+            document.body.style.backgroundColor = '';
+            box.style.backgroundColor = '';
         });
     </script>
 </body>

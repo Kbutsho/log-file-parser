@@ -85,7 +85,7 @@
             setTimeout(function() {
                 var successAlert = document.getElementById('message');
                 successAlert.parentNode.removeChild(successAlert);
-            }, 2500);
+            }, 3000);
         });
         const passwordToggle = document.getElementById("password-toggle");
         const passwordInput = document.getElementById("password");

@@ -25,7 +25,7 @@
 
         th,
         td {
-            font-size: 14px;
+            font-size: 16px;
         }
     </style>
 
@@ -46,8 +46,8 @@
                 <tr class="text-center text-white">
                     <th>ID</th>
                     <th>Remote Host</th>
-                    <th>Remote Log</th>
-                    <th>Remote User</th>
+                    {{-- <th>Remote Log</th>
+                    <th>Remote User</th> --}}
                     <th>Time Stamp</th>
                     <th>HTTP Method</th>
                     {{--                     <th>URL Path</th> --}}
@@ -68,14 +68,13 @@
             setTimeout(function() {
                 var successAlert = document.getElementById('myDiv');
                 successAlert.parentNode.removeChild(successAlert);
-            }, 3000);
+            }, 5000);
         });
         const toggleDiv = () => {
             let myDiv = document.getElementById("myDiv");
             myDiv.style.transition = "all 0.3s";
             myDiv.style.opacity = "0";
             myDiv.style.pointerEvents = "none";
-
             setTimeout(() => {
                 myDiv.remove();
             }, 300)
@@ -84,6 +83,7 @@
             $('#data').DataTable({
                 ajax: '{{ route('logs') }}',
                 processing: true,
+                serverSide: true,
                 language: {
                     "processing": "<div class='my-5' style='height: 25vh'></div>"
                 },
@@ -98,16 +98,16 @@
                         name: 'remote_host',
                         className: 'text-center'
                     },
-                    {
-                        data: 'remote_log',
-                        name: 'remote_log',
-                        className: 'text-center'
-                    },
-                    {
-                        data: 'remote_user',
-                        name: 'remote_user',
-                        className: 'text-center'
-                    },
+                    // {
+                    //     data: 'remote_log',
+                    //     name: 'remote_log',
+                    //     className: 'text-center'
+                    // },
+                    // {
+                    //     data: 'remote_user',
+                    //     name: 'remote_user',
+                    //     className: 'text-center'
+                    // },
                     {
                         data: 'time_stamp',
                         name: 'time_stamp',

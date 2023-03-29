@@ -16,6 +16,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('upload', [FileController::class, 'showForm'])->name('upload');
     Route::post('file-parse', [FileController::class, 'fileParse'])->name('file-parse');
     Route::get('logs', [FileController::class, 'showAllLogs'])->name('logs');
+    Route::get('delete-all-logs', [FileController::class, 'deleteAllLogs'])->name('delete-all-logs');
+    Route::delete('log/{id}', [FileController::class, 'deleteLogById'])->name('log.delete');
+    Route::get('log/{id}/details', [FileController::class, 'detailsLogById'])->name('log.details');
 });
 
 Route::middleware(['guest'])->group(function () {

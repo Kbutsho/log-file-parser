@@ -14,10 +14,17 @@
     <script src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.13.4/datatables.min.js"></script>
     {{-- iconify --}}
     <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+    {{-- font awesome --}}
+    <script src="https://kit.fontawesome.com/5301593776.js" crossorigin="anonymous"></script>
     {{-- google font --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+
+
+    {{-- sweet alart  --}}
+    <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
     <style>
         body {
             font-family: 'Josefin Sans', sans-serif;
@@ -31,44 +38,59 @@
 
 <body>
     @include('layout.navBar')
-    <div class="container my-4">
+    <div class="container my-3">
         @if (session('message'))
             <div id="myDiv">
                 <div class="d-flex w-100 alert alert-success justify-content-between">
-                    <div> {{ session('message') }}</div>
+                    <div class="fw-bold"> {{ session('message') }}</div>
                     <span class="iconify" style="cursor: pointer" data-icon="bi-x-lg" onclick="toggleDiv()"></span>
                 </div>
             </div>
         @endif
-        {{-- <a class="mb-3 btn btn-success fw-bold w-100" href="/upload">add logs</a> --}}
+        <button onclick="showSweetAlert()">Click me!</button>
+
         <table id="data" class="pt-3 table table-hover table-striped table-borderless">
             <thead class="bg-primary">
                 <tr class="text-center text-white">
                     <th>ID</th>
                     <th>Remote Host</th>
-                    {{-- <th>Remote Log</th>
-                    <th>Remote User</th> --}}
                     <th>Time Stamp</th>
                     <th>HTTP Method</th>
-                    {{--                     <th>URL Path</th> --}}
                     <th>Protocol Version</th>
                     <th>HTTP Status Code</th>
                     <th>Bytes Sent</th>
-                    {{--                     <th>Referer URL</th> --}}
                     <th>User Agent</th>
-                    {{-- <th>Forwarded Info</th> --}}
+                    <th>Action</th>
                 </tr>
             </thead>
-    
         </table>
     </div>
-
     <script>
+        function showSweetAlert() {
+            swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this imaginary file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel plx!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                });
+        }
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 var successAlert = document.getElementById('myDiv');
                 successAlert.parentNode.removeChild(successAlert);
-            }, 5000);
+            }, 3000);
         });
         const toggleDiv = () => {
             let myDiv = document.getElementById("myDiv");
@@ -98,27 +120,23 @@
                         name: 'remote_host',
                         className: 'text-center'
                     },
-                    // {
-                    //     data: 'remote_log',
-                    //     name: 'remote_log',
-                    //     className: 'text-center'
-                    // },
-                    // {
-                    //     data: 'remote_user',
-                    //     name: 'remote_user',
-                    //     className: 'text-center'
-                    // },
                     {
                         data: 'time_stamp',
                         name: 'time_stamp',
-                        className: 'text-center'
+                        className: 'text-center',
+                        render: function(data) {
+                            let date = new Date(data);
+                            let year = date.getFullYear();
+                            let month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            let day = ('0' + date.getDate()).slice(-2);
+                            return year + '-' + month + '-' + day;
+                        }
                     },
                     {
                         data: 'http_method',
                         name: 'http_method',
                         className: 'text-center'
                     },
-                    // {data: 'url_path',  name: 'url_path' },
                     {
                         data: 'protocol_version',
                         name: 'protocol_version',
@@ -134,23 +152,39 @@
                         name: 'bytes_sent',
                         className: 'text-center'
                     },
-                    // {data: 'referer_url',  name: 'referer_url' },
                     {
-                        "data": "user_agent",
-                        "name": "user_agent",
+                        data: "user_agent",
+                        name: "user_agent",
                         className: 'text-center',
-                        "render": function(data, type, row) {
+                        render: function(data, type, row) {
                             var parts = data.split('/');
-                            return parts[0]; // return the first part of the string
+                            return parts[0];
                         }
                     },
-                    // {
-                    //     data: 'forwarded_info',
-                    //     name: 'forwarded_info'
-                    // }
-
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                        className: 'text-center'
+                    }
                 ]
             });
+        });
+        $(document).on('click', '.delete-btn', function(e) {
+            e.preventDefault();
+
+            var url = $(this).attr('href');
+            swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this log!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        window.location.href = url;
+                    }
+                });
         });
     </script>
 </body>

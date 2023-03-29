@@ -11,13 +11,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
-
     <style>
         body {
             font-family: 'Josefin Sans', sans-serif;
             transition: background-color 0.5s ease-out;
         }
-
         span {
             font-weight: bold;
             color: red;
@@ -59,7 +57,7 @@
             setTimeout(function() {
                 var successAlert = document.getElementById('message');
                 successAlert.parentNode.removeChild(successAlert);
-            }, 5000);
+            }, 3000);
         });
         const box = document.querySelector('.box');
         const form = document.getElementById('upload-form');

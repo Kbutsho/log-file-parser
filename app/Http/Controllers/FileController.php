@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log as FacadesLog;
 use Illuminate\Support\Facades\Storage;
-use SplFileObject;
 use Yajra\DataTables\Facades\DataTables as DataTables;
 
 class FileController extends Controller
@@ -88,15 +87,12 @@ class FileController extends Controller
         //         ->with('message', 'an error occurred while saving the logs!');
         // }
 
-
         $file = $request->file('file');
         $path = $file->store('temp');
         $file_content = file_get_contents(storage_path("app/$path"));
         $lines = explode(PHP_EOL, $file_content);
         $matched = false;
         $count = 0;
-        // $chunkSize = 1000000;
-        $carryValues = "";
         DB::beginTransaction();
         try {
             $values = "";
@@ -119,23 +115,14 @@ class FileController extends Controller
                         'forwarded_info' => $matches[12],
                     ];
                     $values .= "('" . implode("', '", $log) . "'),";
-                    //$carryValues .= "('" . implode("', '", $log) . "'),";
-                    // $logs[] = $log;
                     $matched = true;
                     $count++;
-                    // if ($count % $chunkSize == 0) {
-                    //     $query = "INSERT INTO logs (remote_host, remote_log, remote_user, time_stamp, http_method, url_path, protocol_version, http_status_code, bytes_sent, referer_url, user_agent, forwarded_info) VALUES " . rtrim($values, ", ").";" ;
-                    //     DB::statement($query);
-                    //     $values = "";
-                    // }
                 } else {
                     continue;
                 }
             }
             $query = "INSERT INTO logs (remote_host, remote_log, remote_user, time_stamp, http_method, url_path, protocol_version, http_status_code, bytes_sent, referer_url, user_agent, forwarded_info) VALUES " . rtrim($values, ", ") . ";";
-            FacadesLog::info(time());
             DB::statement($query);
-            FacadesLog::info(time());
             DB::commit();
             if (!$matched) {
                 return redirect()->back()
@@ -155,8 +142,48 @@ class FileController extends Controller
     {
         if ($request->ajax()) {
             $logs = Log::query();
-            return DataTables::of($logs)->make(true);
+            return DataTables::of($logs)
+                ->addColumn('actions', function ($row) {
+                    return "<a href='" . route('log.details', $row->id) . "' class='btn btn-sm btn-success px-2 mr-2'><i class='ms-1 fas fa-info-circle'></i> Details</a>
+                        <form action='" . route('log.delete', $row->id) . "' method='POST' class='d-inline-block'>
+                            " . csrf_field() . "
+                            " . method_field('DELETE') . "
+                            <button type='submit' class='btn btn-sm btn-danger px-2' onclick='return confirm(\"Are you sure you want to delete this log?\")'>Delete <i class='ms-1  fas fa-trash'></i> </button>
+                     </form>";
+                })
+                ->rawColumns(['actions'])
+                ->make(true);
         }
-        return view('logs');
+        $count = Log::count();
+        return view('logs')->with('logs', $count);
+    }
+    public function deleteAllLogs()
+    {
+        $count = Log::count();
+        if ($count > 0) {
+            Log::truncate();
+            return redirect()->route('logs')->with('message', 'All logs has been deleted!');
+        } else {
+            return redirect()->route('logs')->with('message', 'No logs found to delete!');
+        }
+    }
+    public function deleteLogById($id)
+    {
+        $log = Log::find($id);
+        if ($log) {
+            $log->delete();
+            return redirect()->route('logs')->with('message', 'Log id ' . $id . ' deleted successfully!');
+        } else {
+            return redirect()->route('logs')->with('message', 'Log record not found!');
+        }
+    }
+    public function detailsLogById($id)
+    {
+        $log = Log::find($id);
+        if ($log) {
+            return view('logDetails', ['log' => $log]);
+        } else {
+            return redirect()->route('logs')->with('message', 'Log record not found!');
+        }
     }
 }

@@ -48,7 +48,7 @@
     <div class="container">
         <div class="div d-flex justify-content-center align-items-center" style="min-height: 100vh">
             <div class="p-4 box" id="box">
-                <h3 class="my-4">Sign up</h3>
+                <h3 class="my-4">Login</h3>
                 @if (session('success'))
                     <div class="alert alert-danger my-2 fw-bold" id="message"> {{ session('success') }}</div>
                 @endif
